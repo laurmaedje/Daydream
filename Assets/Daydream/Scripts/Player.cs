@@ -25,7 +25,7 @@ public class Player : MonoBehaviour {
             if (Physics.Raycast(ray, out hit) && hit.transform.tag == "Ground") {
                 StopCoroutine("MoveTo");
                 StartCoroutine("MoveTo", new Vector3(hit.point.x, 1f, hit.point.z));
-                clickEffect.transform.position = new Vector3(hit.point.x, 1f, hit.point.z);
+                clickEffect.transform.position = new Vector3(hit.point.x, 0.5f, hit.point.z);
                 clickEffect.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
             }
         }
@@ -78,7 +78,6 @@ public class Player : MonoBehaviour {
         }
     }
 
-    // TODO realismus ..
     void MoveWheels() {
         transform.GetChild(1).transform.Rotate(150f * Time.deltaTime, 0f, 0f);
         transform.GetChild(2).transform.Rotate(150f * Time.deltaTime, 0f, 0f);
