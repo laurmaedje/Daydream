@@ -34,7 +34,6 @@ public class Player : MonoBehaviour {
 
     IEnumerator MoveTo(Vector3 target) {
 
-
         if (!source.isPlaying) {
             source.Play();
             source.volume = 0;
@@ -44,14 +43,12 @@ public class Player : MonoBehaviour {
         float angle = Vector3.Angle(target - transform.position, transform.forward);
         float sign = -Mathf.Sign(Vector3.Cross(target - transform.position, transform.forward).y);
 
-        print(sign);
-
         float rotation = 0f;
         while(rotation < angle) {
             if(source.volume < volume)
                 source.volume += 10f * Time.deltaTime;
 
-            MoveWheels(false, sign);
+            MoveWheels();
 
             transform.Rotate(0, sign * rotateSpeed * Time.deltaTime, 0f);
             rotation += rotateSpeed * Time.deltaTime;
@@ -68,7 +65,7 @@ public class Player : MonoBehaviour {
         float moved = 0f;
 
         while (moved < distance) {
-            MoveWheels(true, 0f);
+            MoveWheels();
 
             transform.position += moveSpeed * dir * Time.deltaTime;
             moved += moveSpeed * Time.deltaTime;
@@ -82,21 +79,15 @@ public class Player : MonoBehaviour {
     }
 
     // TODO realismus ..
-    void MoveWheels(bool type, float dir) {
-        float m1 = 1f;
-        float m2 = 1f;
-        if (!type) {
-            m1 = dir;
-            m2 = dir;
-        }
-         
-        transform.GetChild(1).transform.Rotate(m1 * 150f * Time.deltaTime, 0f, 0f);
-        transform.GetChild(2).transform.Rotate(m2 * 150f * Time.deltaTime, 0f, 0f);
+    void MoveWheels() {
+        transform.GetChild(1).transform.Rotate(150f * Time.deltaTime, 0f, 0f);
+        transform.GetChild(2).transform.Rotate(150f * Time.deltaTime, 0f, 0f);
 
-        transform.GetChild(3).transform.Rotate(m1 * 300f * Time.deltaTime, 0f, 0f);
-        transform.GetChild(4).transform.Rotate(m2 * 300f * Time.deltaTime, 0f, 0f);
+        transform.GetChild(3).transform.Rotate(300f * Time.deltaTime, 0f, 0f);
+        transform.GetChild(4).transform.Rotate(300f * Time.deltaTime, 0f, 0f);
 
-        transform.GetChild(5).transform.Rotate(m1 * 300f * Time.deltaTime, 0f, 0f);
-        transform.GetChild(6).transform.Rotate(m2 * 300f * Time.deltaTime, 0f, 0f);
+        transform.GetChild(5).transform.Rotate(300f * Time.deltaTime, 0f, 0f);
+        transform.GetChild(6).transform.Rotate(300f * Time.deltaTime, 0f, 0f);
     }
+
 }
