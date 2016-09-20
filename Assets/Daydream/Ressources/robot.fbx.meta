@@ -9,13 +9,45 @@ ModelImporter:
     100002: Lamp
     100004: Robot
     100006: //RootNode
+    100008: Wheel1
+    100010: Wheel2
+    100012: Wheel3
+    100014: Wheel1.001
+    100016: Wheel2.001
+    100018: Wheel3.001
     400000: Camera
     400002: Lamp
     400004: Robot
     400006: //RootNode
+    400008: Wheel1
+    400010: Wheel2
+    400012: Wheel3
+    400014: Wheel1.001
+    400016: Wheel2.001
+    400018: Wheel3.001
     2300000: Robot
+    2300002: //RootNode
+    2300004: Wheel1
+    2300006: Wheel2
+    2300008: Wheel3
+    2300010: Wheel1.001
+    2300012: Wheel2.001
+    2300014: Wheel3.001
     3300000: Robot
+    3300002: //RootNode
+    3300004: Wheel1
+    3300006: Wheel2
+    3300008: Wheel3
+    3300010: Wheel1.001
+    3300012: Wheel2.001
+    3300014: Wheel3.001
     4300000: Robot
+    4300002: Wheel3
+    4300004: Wheel2
+    4300006: Wheel1
+    4300008: Wheel3.001
+    4300010: Wheel1.001
+    4300012: Wheel2.001
   materials:
     importMaterials: 1
     materialName: 0
