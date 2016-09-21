@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Player : MonoBehaviour {
 
-    enum Mode {
+    public enum Mode {
         MOVEMENT,
         BOMB
     }
 
     [SerializeField] GameObject clickEffect;
+    [SerializeField] GameObject ModeInterface;
 
     [SerializeField] float moveSpeed;
     [SerializeField] float rotateSpeed;
@@ -22,14 +24,32 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         source = GetComponent<AudioSource>();
-        mode = Mode.BOMB;
+        SetMode(0);
 	}
+
+    public void SetMode(int mode) {
+        this.mode = (Mode)mode;
+
+        for(int i = 0; i < System.Enum.GetNames(typeof(Mode)).Length; i++) {
+            if (i == mode) {
+                ModeInterface.transform.GetChild(i).GetComponent<Image>().color = Color.yellow;
+            } else {
+                ModeInterface.transform.GetChild(i).GetComponent<Image>().color = Color.white;
+            }
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
+        bool hoverGui = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(-1);
+
+        // Change mode
+        if (Input.GetKeyDown(KeyCode.Tab)) {
+            SetMode(((int)mode + 1) % System.Enum.GetNames(typeof(Mode)).Length);
+        }
 
         // Move
-        if (Input.GetMouseButtonDown(0) && mode == Mode.MOVEMENT) {
+        if (Input.GetMouseButtonDown(0) && mode == Mode.MOVEMENT && !hoverGui) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit) && hit.transform.tag == "Ground") {
@@ -37,18 +57,20 @@ public class Player : MonoBehaviour {
                 clickEffect.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
                 Vector3[] path = Pathfinder.FindPath(transform.position, hit.point);
                 StopCoroutine("FollowPath");
-                print(path);
                 if (path != null) {
                     StartCoroutine("FollowPath", path);
                 } else {
                     StartCoroutine("FadeSoundOut");
                 }                    
             }
-        } else if (Input.GetMouseButtonDown(0) && mode == Mode.BOMB) {
+        } else if (Input.GetMouseButtonDown(0) && mode == Mode.BOMB && !hoverGui) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if(Physics.Raycast(ray, out hit)) {
-                // todo
+            if (Physics.Raycast(ray, out hit)) {
+                Vector3 dir = hit.point - transform.position;
+                dir.Normalize();
+                GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity) as GameObject;
+                bomb.GetComponent<Rigidbody>().AddForce(dir * 400f);
             }
         }
 
