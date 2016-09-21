@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Grid : MonoBehaviour {
 
+    static Grid instance;
+
     public LayerMask obstacleMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
@@ -17,21 +19,23 @@ public class Grid : MonoBehaviour {
     }
 
     void Awake() {
+        instance = this;
+
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / (nodeRadius * 2));
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / (nodeRadius * 2));
         CreateGrid();
     }
 
-    void CreateGrid() {
-        grid = new Node[gridSizeX, gridSizeY];
+    public static void CreateGrid() {
+        instance.grid = new Node[instance.gridSizeX, instance.gridSizeY];
 
-        Vector3 worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
+        Vector3 worldBottomLeft = instance.transform.position - Vector3.right * instance.gridWorldSize.x / 2 - Vector3.forward * instance.gridWorldSize.y / 2;
 
-        for (int x = 0; x < gridSizeX; x++) {
-            for (int y = 0; y < gridSizeY; y++) {
-                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeRadius * 2 + nodeRadius) + Vector3.forward * (y * nodeRadius * 2 + nodeRadius);
-                bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius * 4, obstacleMask));
-                grid[x, y] = new Node(walkable, worldPoint, x, y);
+        for (int x = 0; x < instance.gridSizeX; x++) {
+            for (int y = 0; y < instance.gridSizeY; y++) {
+                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * instance.nodeRadius * 2 + instance.nodeRadius) + Vector3.forward * (y * instance.nodeRadius * 2 + instance.nodeRadius);
+                bool walkable = !(Physics.CheckCapsule(worldPoint, new Vector3(worldPoint.x, worldPoint.y + 2, worldPoint.z), instance.nodeRadius * 2, instance.obstacleMask));
+                instance.grid[x, y] = new Node(walkable, worldPoint, x, y);
             }
         }
     }
@@ -64,5 +68,22 @@ public class Grid : MonoBehaviour {
         int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
         return grid[x, y];
+    }
+
+    void OnDrawGizmos() {
+        if (grid == null) return;
+
+        /*Vector3 worldBottomLeft = instance.transform.position - Vector3.right * instance.gridWorldSize.x / 2 - Vector3.forward * instance.gridWorldSize.y / 2;
+        for (int x = 0; x < instance.gridSizeX; x++) {
+            for (int y = 0; y < instance.gridSizeY; y++) {
+                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * instance.nodeRadius * 2 + instance.nodeRadius) + Vector3.forward * (y * instance.nodeRadius * 2 + instance.nodeRadius);
+                Gizmos.DrawSphere(worldPoint, instance.nodeRadius * 2);
+            }
+        }*/
+
+        foreach(var n in grid) {
+            Gizmos.color = n.walkable ? Color.green : Color.red;
+            Gizmos.DrawCube(n.worldPos, nodeRadius * Vector3.one);
+        }
     }
 }

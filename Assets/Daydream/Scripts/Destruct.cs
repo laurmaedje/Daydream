@@ -2,21 +2,24 @@
 
 public class Destruct : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        Mesh mesh = GetComponent<MeshFilter>().mesh;
-        Vector3[] vertices = mesh.vertices;
-        Vector3[] normals = mesh.normals;
-        int i = 0;
-        while (i < vertices.Length) {
-            vertices[i] += normals[i] * Mathf.Sin(Time.time);
-            i++;
+    public void DestructAround(Vector3 center, float radius) {
+
+        // Check for every block if it's center is in the explosion radius
+        for (int i = 0; i < transform.childCount; i++) {
+            Vector3 point = transform.GetChild(i).localPosition;
+            point = transform.TransformPoint(point);
+            float distance = Vector3.Distance(point, center);
+
+            if (distance < radius) {
+                Destroy(transform.GetChild(i).gameObject);
+            }
         }
-        mesh.vertices = vertices;
+
+        Invoke("RecreateGrid", .1f);
     }
+
+    void RecreateGrid() {
+        Grid.CreateGrid();
+    }
+
 }
