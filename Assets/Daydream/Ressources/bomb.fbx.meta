@@ -1,23 +1,23 @@
 fileFormatVersion: 2
-guid: d4ee585054a341e449ba008d211d16a9
-timeCreated: 1474386155
+guid: d4ae7aee27e71284ba116a5f29fa554f
+timeCreated: 1474445482
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Camera
-    100002: Cube
-    100004: //RootNode
-    100006: Lamp
-    400000: Camera
-    400002: Cube
-    400004: //RootNode
-    400006: Lamp
-    2300000: Cube
+    100000: //RootNode
+    100002: Camera
+    100004: Lamp
+    100006: Sphere
+    400000: //RootNode
+    400002: Camera
+    400004: Lamp
+    400006: Sphere
+    2300000: Sphere
     2300002: //RootNode
-    3300000: Cube
+    3300000: Sphere
     3300002: //RootNode
-    4300000: Cube
+    4300000: Sphere
   materials:
     importMaterials: 1
     materialName: 0
